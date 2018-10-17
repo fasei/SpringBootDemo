@@ -5,7 +5,7 @@ import com.example.demo.constants.CurrentUserConstants;
 import com.example.demo.exception.MyException;
 import com.example.demo.log.LogUtil;
 import com.example.demo.model.UserInfos;
-import com.example.demo.service.UserInfoServices;
+import com.example.demo.service.UserServices;
 import com.example.demo.util.TokenUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 public class AuthenticationInterceptor implements HandlerInterceptor {
     public final static String Authorization = "Authorization";
     @Autowired
-    private UserInfoServices userService;
+    private UserServices userService;
 
     /**
      * 在请求处理之前进行调用（Controller方法调用之前）
@@ -68,7 +68,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             String userStrID = claims.getId();
             Long id = Long.parseLong(userStrID);
 
-            UserInfos user = userService.getUserInfo(id);
+            UserInfos user = null;
+            try {
+                user = userService.getUserInfo(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if (user == null) {
                 throw new MyException(666, "用户不存在，请重新登录");
             }

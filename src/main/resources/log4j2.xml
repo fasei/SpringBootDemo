@@ -166,6 +166,13 @@
         <Logger name="org.springframework" level="INFO" additivity="false"/>
         <Logger name="org.mybatis" level="INFO" additivity="false"/>
         -->
+        <!--过滤无用信息  -->
+        <Logger name="com.zaxxer.hikari" level="INFO" additivity="false"/>
+        <Logger name="org.springframework" level="INFO" additivity="false"/>
+        <Logger name="org.mybatis" level="INFO" additivity="false"/>
+        <Logger name="springfox.documentation" level="INFO" additivity="false"/>
+        <Logger name="org.apache.juli" level="INFO" additivity="false"/>
+        <Logger name="org.hibernate.validator" level="INFO" additivity="false"/>
 
         <Logger name="platform" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>

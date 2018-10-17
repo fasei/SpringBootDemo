@@ -15,21 +15,13 @@ import java.util.List;
 @Mapper
 public interface AbsUserLoginServices {
     /**
-     * 插入新注册用户
-     *
-     * @param mUserLogin 用户信息
-     * @return
-     */
-    int insertNewUser(UserLogin mUserLogin);
-
-    /**
      * 删除用户信息
      *
      * @param mUserName
      * @return
      */
     @Transactional
-    int deleteUser(String mUserName);
+    int deleteUser(String mUserName)throws Exception;
 
     /**
      * 更新用户信息
@@ -38,7 +30,7 @@ public interface AbsUserLoginServices {
      * @return
      */
     @Transactional
-    int updateUser(UserLogin mUserLogin);
+    int updateUser(UserLogin mUserLogin)throws Exception;
 
     /**
      * 查询用户（登陆验证功能）
@@ -47,7 +39,7 @@ public interface AbsUserLoginServices {
      * @param mUserPassword
      * @return
      */
-    int getUserInfo(String mUserName, String mUserPassword);
+    int getUserInfo(String mUserName, String mUserPassword)throws Exception;
 
     /**
      * 查询用户
@@ -55,6 +47,6 @@ public interface AbsUserLoginServices {
      * @param mUserName
      * @return
      */
-    UserLogin getUserInfo(String mUserName);
+    UserLogin getUserLogin(String mUserName)throws Exception;
 
 }

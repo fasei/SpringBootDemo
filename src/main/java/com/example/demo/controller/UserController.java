@@ -10,21 +10,18 @@ import com.example.demo.exception.MyException;
 import com.example.demo.log.LogUtil;
 import com.example.demo.model.UserInfos;
 import com.example.demo.model.UserLogin;
-import com.example.demo.service.UserInfoServices;
-import com.example.demo.service.UserLoginServices;
+import com.example.demo.service.UserServices;
 import com.example.demo.util.ModeFactory;
 import com.example.demo.util.TokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * Author: wangchao
@@ -39,31 +36,46 @@ public class UserController extends BaseController implements AbsUserController 
     ConfigData mConfigData;
 
     @Resource
-    UserInfoServices mUserInfoServices;
+    UserServices mUserServices;
 
-    @Resource
-    UserLoginServices mUserLoginServices;
 
     public Result login(String username, String password) {
-        UserLogin mUserLogin = mUserLoginServices.getUserInfo(username);
-        if (mUserLogin == null) {
-            return Result.failure(ResultCode.USER_NOT_EXIST);
+        Result s = Result.getInstance();
+        UserLogin mUserLogin = null;
+        try {
+            mUserLogin = mUserServices.getUserLogin(username);
+            if (mUserLogin == null) {
+                return Result.failure(ResultCode.USER_NOT_EXIST);
+            }
+            if (!mUserLogin.getPsw().equals(password)) {//密码不相等
+                return Result.failure(ResultCode.USER_LOGIN_ERROR_PASSWORD);
+            }
+            String token = TokenUtil.createJwtToken(mUserLogin.getName() + "");
+            return Result.success(new TokenResponse(token));
+        } catch (Exception e) {
+            e.printStackTrace();
+            s.setResultCode(ResultCode.DATA_IS_WRONG);
         }
-        if (!mUserLogin.getPsw().equals(password)) {//密码不相等
-            return Result.failure(ResultCode.USER_LOGIN_ERROR_PASSWORD);
-        }
-        String token = TokenUtil.createJwtToken(mUserLogin.getName() + "");
-        return Result.success(new TokenResponse(token));
+        return s;
+
+
     }
 
     public Result authorizationLogin(String authorizationid) {
-        UserInfos user = mUserInfoServices.getUserInfo(authorizationid);
-        if (user == null) {
-            return Result.failure(ResultCode.USER_NOT_EXIST);
-        }
+        UserInfos user = null;
+        try {
+            user = mUserServices.getUserInfo(authorizationid);
+            if (user == null) {
+                return Result.failure(ResultCode.USER_NOT_EXIST);
+            }
 
-        String token = TokenUtil.createJwtToken(user.getId() + "");
-        return Result.success(new TokenResponse(token));
+            String token = TokenUtil.createJwtToken(user.getId() + "");
+            return Result.success(new TokenResponse(token));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.failure(ResultCode.DATA_IS_WRONG);
+
     }
 
     @LoginRequired
@@ -91,18 +103,27 @@ public class UserController extends BaseController implements AbsUserController 
 
     @Override
     public Result registerUser(String username, String password) {
-        UserInfos user = mUserInfoServices.getUserInfo(username);
+        UserInfos user = null;
+        try {
+            user = mUserServices.getUserInfo(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (user != null) {
             return Result.failure(ResultCode.USER_HAS_EXISTED);
         }
 
-        UserInfos u= ModeFactory.getNewUserInfo(username);
-        int result=mUserInfoServices.setUser(u);
-//        Userinfo u = new Userinfo(username, password);
-//        LogUtil.getBussinessLogger().info("registerUser:" + u.toString());
-//
-//        int result = mapper.setUser(u);
-//        logger.debug("registerUser.result:" + result);
+        UserInfos u = ModeFactory.createNewUserInfo(username);
+        UserLogin mUserLogin = ModeFactory.createNewUserLogin(username, password);
+        int mUserLoginResult = 0;
+        try {
+            mUserLoginResult = mUserServices.addNewUser(u, mUserLogin);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(ResultCode.DATA_IS_WRONG);
+        }
+
+        logger.debug("registerUser.mUserLoginResult:" + mUserLoginResult);
 
         return Result.success();
     }

@@ -25,6 +25,17 @@ public class OutputUtil {
         System.out.println(o.getClass().getSimpleName() + ":" + JsonUtil.formatJson(msg));
     }
 
+    public static void d(Object o) {
+        if (o == null) {
+            return;
+        }
+        Gson g = new Gson();
+        String msg = g.toJson(o);
+        System.out.println(JsonUtil.formatJson(msg));
+
+    }
+
+
     public static String toString(Object o) {
         if (o == null) {
             return "";

@@ -22,6 +22,16 @@ public class Result extends Base implements Serializable {
      *
      * @return
      */
+    public static Result getInstance() {
+        Result result = new Result();
+        return result;
+    }
+
+    /**
+     * 结果成功，无参
+     *
+     * @return
+     */
     public static Result success() {
         Result result = new Result();
         result.setResultCode(ResultCode.SUCCESS);

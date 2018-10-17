@@ -1,7 +1,9 @@
 package com.example.demo.service.abs;
 
 import com.example.demo.model.UserInfos;
+import com.example.demo.model.UserLogin;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,12 +15,14 @@ import java.util.List;
 @Mapper
 public interface AbsUserInfosServices {
     /**
-     * 插入用户
+     * 注册新用户
      *
-     * @param userinfo 用户信息
+     * @param mUserInfos 用户信息
+     * @param mUserLogin 登录信息
      * @return
      */
-    int setUser(UserInfos userinfo);
+    @Transactional
+    int addNewUser(UserInfos mUserInfos, UserLogin mUserLogin) throws Exception;
 
     /**
      * 删除用户信息
@@ -26,7 +30,7 @@ public interface AbsUserInfosServices {
      * @param id
      * @return
      */
-    int deleteUser(long id);
+    int deleteUser(long id) throws Exception;
 
     /**
      * 更新用户信息
@@ -34,7 +38,7 @@ public interface AbsUserInfosServices {
      * @param user
      * @return
      */
-    int updateUser(UserInfos user);
+    int updateUserInfos(UserInfos user) throws Exception;
 
     /**
      * 分页获取用户信息
@@ -43,9 +47,10 @@ public interface AbsUserInfosServices {
      * @param pageSize
      * @return
      */
-    List<UserInfos> getUserList(int pageNum, int pageSize);
+    List<UserInfos> getUserInfos(int pageNum, int pageSize) throws Exception;
 
-    UserInfos getUserInfo(String name);
-    UserInfos getUserInfo(long id);
+    UserInfos getUserInfo(String name) throws Exception;
+
+    UserInfos getUserInfo(long id) throws Exception;
 
 }
