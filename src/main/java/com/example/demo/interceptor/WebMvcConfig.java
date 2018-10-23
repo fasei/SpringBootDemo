@@ -26,6 +26,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/**")
 //                .excludePathPatterns("/swagger-resources/**","/error","/static/**")
         ;
+
+        registry.addInterceptor(localResourcesInterceptor()).addPathPatterns("/*.png");
+
     }
 
     @Override
@@ -51,5 +54,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public AuthenticationInterceptor authenticationInterceptor() {
         return new AuthenticationInterceptor();
+    }
+
+    @Bean
+    public LocalResourcesInterceptor localResourcesInterceptor() {
+        return new LocalResourcesInterceptor();
     }
 }

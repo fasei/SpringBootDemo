@@ -20,15 +20,15 @@ public interface AbsUserController {
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "password", value = "登录密码", required = true, dataType = "String", paramType = "query"),
     })
-    @RequestMapping(value = "/normallogin", method = RequestMethod.POST)
-    Result login(@RequestParam String username, @RequestParam String password);
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    Result login(String username, String password);
 
     @ApiOperation(value = "授权登录", notes = "使用授权ID来登录获取token")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "authorizationid", value = "授权ID", required = true, dataType = "String", paramType = "query"),
     })
     @RequestMapping(value = "/authorizationlogin", method = RequestMethod.POST)
-    Result authorizationLogin(@RequestParam String authorizationid);
+    Result authorizationLogin(String authorizationid);
 
     @ApiOperation(value = "注册用户", notes = "注册新用户")
     @ApiImplicitParams({
@@ -36,6 +36,6 @@ public interface AbsUserController {
             @ApiImplicitParam(name = "password", value = "登录密码", required = true, dataType = "String", paramType = "query"),
     })
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    Result registerUser(@RequestParam String username, @RequestParam String password);
+    Result registerUser(String username, String password);
 
 }

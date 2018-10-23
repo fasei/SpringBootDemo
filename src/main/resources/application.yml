@@ -1,20 +1,33 @@
 server:
   port: 20888
 
-
 hehe:
   name: 123456
   psw: 999999
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/info?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 123456
-    max-active: 20
-    max-idle: 8
-    min-idle: 8
-    initial-size: 10
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/info?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+      username: root
+      password: 123456
+      max-active: 20
+      max-idle: 8
+      min-idle: 8
+      initial-size: 10
+# 文件上传时的大小
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 50MB
+      max-file-size: 50MB
+  mvc:
+    static-path-pattern: /**
+  #可以添加访问本地资源设置访问
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${localfile.path}
+
+localfile:
+    path: d:/aaa
 
 logging:
   config: classpath:log4j2.xml

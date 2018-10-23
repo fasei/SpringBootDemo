@@ -4,6 +4,9 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <!-- 配置生成器 -->
 <generatorConfiguration>
+
+    <properties resource="mybatisGeneratorinit.properties"/>
+
     <!-- 可以用于加载配置项或者配置文件，在整个配置文件中就可以使用${propertyKey}的方式来引用配置项
         resource：配置资源加载地址，使用resource，MBG从classpath开始找，
         比如com/myproject/generatorConfig.properties
@@ -40,17 +43,17 @@
         </commentGenerator>
 
         <!-- 必须要有的，使用这个配置链接数据库-->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/info?useUnicode=true&amp;characterEncoding=UTF-8"
-                        userId="root"
-                        password="123456"/>
+        <jdbcConnection driverClass="${jdbc_driver}"
+                        connectionURL="${jdbc_url}"
+                        userId="${jdbc_user}"
+                        password="${jdbc_password}"/>
         <!-- java模型创建器，是必须要的元素
                 负责：1，key类（见context的defaultModelType）；2，java类；3，查询类
                 targetPackage：生成的类要放的包，真实的包受enableSubPackages属性控制；
                 targetProject：目标项目，指定一个存在的目录下，生成的内容会放到指定目录中，
                 如果目录不存在，MBG不会自动建目录
              -->
-        <javaModelGenerator targetPackage="com.example.demo.model" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="${model_package}" targetProject="${project}">
             <!--  for MyBatis3/MyBatis3Simple
             自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field；而不是使用setter；
             -->
@@ -62,9 +65,9 @@
                     这个元素就必须配置
                 targetPackage/targetProject:同javaModelGenerator
         -->
-        <sqlMapGenerator targetPackage="com.example.demo.mapper" targetProject="src/main/resources"/>
+        <sqlMapGenerator targetPackage="${mapper_package}" targetProject="${resources}"/>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.demo.mapper" targetProject="src/main/java"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${mapper_package}" targetProject="${project}"/>
         <!--
         选择一个table来生成相关文件，可以有一个或多个table，必须要有table元素
         选择的table会生成一下文件：

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -38,8 +39,7 @@ public class UserController extends BaseController implements AbsUserController 
     @Resource
     UserServices mUserServices;
 
-
-    public Result login(String username, String password) {
+    public Result login(@RequestParam String username, @RequestParam String password){
         Result s = Result.getInstance();
         UserLogin mUserLogin = null;
         try {
@@ -57,11 +57,9 @@ public class UserController extends BaseController implements AbsUserController 
             s.setResultCode(ResultCode.DATA_IS_WRONG);
         }
         return s;
-
-
     }
 
-    public Result authorizationLogin(String authorizationid) {
+    public Result authorizationLogin(@RequestParam String authorizationid) {
         UserInfos user = null;
         try {
             user = mUserServices.getUserInfo(authorizationid);
@@ -75,7 +73,6 @@ public class UserController extends BaseController implements AbsUserController 
             e.printStackTrace();
         }
         return Result.failure(ResultCode.DATA_IS_WRONG);
-
     }
 
     @LoginRequired
@@ -102,7 +99,7 @@ public class UserController extends BaseController implements AbsUserController 
     }
 
     @Override
-    public Result registerUser(String username, String password) {
+    public Result registerUser(@RequestParam String username, @RequestParam String password) {
         UserInfos user = null;
         try {
             user = mUserServices.getUserInfo(username);

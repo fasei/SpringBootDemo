@@ -27,17 +27,22 @@ public enum ResultCode {
     USER_HAS_EXISTED(20005, "用户已存在"),
     USER_LOGIN_ERROR_PASSWORD(20006, "密码错误"),
 
-
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),
 
     /* 系统错误：40001-49999 */
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),
 
-    /* 数据错误：50001-599999 */
+    /* 数据错误：50001-50999 */
     RESULE_DATA_NONE(50001, "数据未找到"),
     DATA_IS_WRONG(50002, "数据有误"),
     DATA_ALREADY_EXISTED(50003, "数据已存在"),
+    DATA_SAVE_WRONG(50004, "数据存储异常"),
+
+    /*上传文件错误：51001-51999*/
+    MAX_UPLOADSIXE(51001, "上传文件过大"),
+
+
 
     /* 接口错误：60001-69999 */
     INTERFACE_INNER_INVOKE_ERROR(60001, "内部系统接口调用异常"),

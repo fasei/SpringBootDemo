@@ -26,11 +26,4 @@ public class ConfigData {
         this.psw = psw;
     }
 
-    @Override
-    public String toString() {
-        return "ConfigData{" +
-                "name='" + name + '\'' +
-                ", psw='" + psw + '\'' +
-                '}';
-    }
 }
