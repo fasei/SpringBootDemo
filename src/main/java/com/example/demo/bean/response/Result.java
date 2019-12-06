@@ -12,10 +12,10 @@ import java.io.Serializable;
  * Description: This is 通用的返回结果样式
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Result extends Base implements Serializable {
+public class Result<T> extends Base<T> implements Serializable {
     private int code;
     private String msg;
-    private Object data;
+    private T data;
 
     /**
      * 结果成功，无参
@@ -66,7 +66,7 @@ public class Result extends Base implements Serializable {
     public Result() {
     }
 
-    public Result(int code, String msg, Object data) {
+    public Result(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -92,7 +92,7 @@ public class Result extends Base implements Serializable {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 

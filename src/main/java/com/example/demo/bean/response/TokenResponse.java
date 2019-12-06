@@ -1,7 +1,6 @@
 package com.example.demo.bean.response;
 
 import com.example.demo.bean.Base;
-import com.example.demo.util.JsonUtil;
 import com.example.demo.util.OutputUtil;
 
 import java.io.Serializable;

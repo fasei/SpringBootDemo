@@ -6,8 +6,11 @@ import com.example.demo.exception.MyException;
 import com.example.demo.log.LogUtil;
 import com.example.demo.model.UserInfos;
 import com.example.demo.service.UserServices;
+import com.example.demo.util.IPUtil;
 import com.example.demo.util.TokenUtil;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -44,6 +47,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
+
+        String ipAddress=IPUtil.getIpAddr(request);
+        LogUtil.getPlatformLogger().info("IPAddress:",ipAddress);
+
+
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         // 判断接口是否需要登录

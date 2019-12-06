@@ -27,7 +27,7 @@ import java.util.UUID;
  * Description: This is
  */
 @RestController
-@RequestMapping(value = "/img")
+@RequestMapping(value = "/controller/img")
 @Api(value = "图片处理", description = "图片处理", tags = "img", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ImgController extends BaseController implements AbsImgController {
 

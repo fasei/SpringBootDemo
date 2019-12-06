@@ -38,7 +38,7 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("springboot利用swagger构建api文档")
-                .description("简单优雅的restfun风格，")
+                .description("简单优雅的restful风格，")
                 .termsOfServiceUrl("http://localhost:20888/swagger-ui.html?baseUrl=#/")
                 .contact(new Contact("Wanc","","919536816@qq.com"))
                 .version("1.0")

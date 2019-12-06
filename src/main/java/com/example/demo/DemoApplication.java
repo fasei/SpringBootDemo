@@ -1,14 +1,15 @@
 package com.example.demo;
 
 import com.example.demo.util.OutputUtil;
+import com.example.demo.websocket.message.MessageCenter;
 import com.github.pagehelper.PageHelper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
 import java.util.Properties;
 
 //@EnableTransactionManagement  //开启事务管理
@@ -16,10 +17,12 @@ import java.util.Properties;
 @MapperScan("com.example.demo.mapper")
 @EnableSwagger2 //允许使用swagger2
 @SpringBootApplication
+@EnableAsync
 public class DemoApplication {
 
     public static void main(String[] args) {
         OutputUtil.d("启动服务");
+        MessageCenter.init();
         SpringApplication app = new SpringApplication(DemoApplication.class);
         app.addInitializers(new BeforeRun());
         ConfigurableApplicationContext context = app.run(args);

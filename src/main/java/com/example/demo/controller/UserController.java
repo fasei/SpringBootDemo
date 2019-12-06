@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.CurrentUser;
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.bean.response.Result;
 import com.example.demo.bean.response.TokenResponse;
@@ -17,12 +18,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * Author: wangchao
@@ -30,11 +30,20 @@ import javax.annotation.Resource;
  * Description: This is 用户操作接口
  */
 @RestController
-@RequestMapping(value = "/demo")
+@RequestMapping(value = "/controller/demo")
 @Api(value = "用户信息查询", description = "用户基本信息操作API", tags = "UserApi", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController extends BaseController implements AbsUserController {
     @Autowired
     ConfigData mConfigData;
+
+//    @NacosValue(value = "${useLocalCache}", autoRefreshed = true)
+//    private String useLocalCache;
+
+//    @RequestMapping(value = "/get", method = GET)
+//    @ResponseBody
+//    public String get() {
+//        return useLocalCache;
+//    }
 
     @Resource
     UserServices mUserServices;
@@ -50,13 +59,19 @@ public class UserController extends BaseController implements AbsUserController 
             if (!mUserLogin.getPsw().equals(password)) {//密码不相等
                 return Result.failure(ResultCode.USER_LOGIN_ERROR_PASSWORD);
             }
-            String token = TokenUtil.createJwtToken(mUserLogin.getName() + "");
+            String token = TokenUtil.createJwtToken(mUserLogin.getId() + "");
             return Result.success(new TokenResponse(token));
         } catch (Exception e) {
             e.printStackTrace();
             s.setResultCode(ResultCode.DATA_IS_WRONG);
         }
         return s;
+    }
+
+    @LoginRequired
+    public Result authorizationLogin(@CurrentUser UserInfos user) {
+        logger.info(user.toString());
+        return Result.success();
     }
 
     public Result authorizationLogin(@RequestParam String authorizationid) {
@@ -127,7 +142,7 @@ public class UserController extends BaseController implements AbsUserController 
 
 
     @ApiOperation(value = "添加自定义异常", notes = "自定义异常", position = 4, nickname = "22")
-    @RequestMapping(value = "/makeexception", method = RequestMethod.GET)
+    @RequestMapping(value = "/makeexception", method = GET)
     public int makeException() {
         logger.info("makeException");
         throw new MyException(222, "自定义的错误");

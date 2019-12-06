@@ -13,7 +13,7 @@ public class OutputUtil {
         if (o == null) {
             return;
         }
-        System.out.println(o.getClass().getSimpleName() + ":" + JsonUtil.formatJson(o.toString()));
+        System.out.println(o.getClass().getSimpleName() + ":" + GsonUtil.formatJson(o.toString()));
     }
 
     public static void log(Object o) {
@@ -22,7 +22,7 @@ public class OutputUtil {
         }
         Gson g = new Gson();
         String msg = g.toJson(o);
-        System.out.println(o.getClass().getSimpleName() + ":" + JsonUtil.formatJson(msg));
+        System.out.println(o.getClass().getSimpleName() + ":" + GsonUtil.formatJson(msg));
     }
 
     public static void d(Object o) {
@@ -31,7 +31,7 @@ public class OutputUtil {
         }
         Gson g = new Gson();
         String msg = g.toJson(o);
-        System.out.println(JsonUtil.formatJson(msg));
+        System.out.println(GsonUtil.formatJson(msg));
 
     }
 
@@ -42,7 +42,7 @@ public class OutputUtil {
         }
         Gson g = new Gson();
         String msg = g.toJson(o);
-        return (o.getClass().getSimpleName() + ":" + JsonUtil.formatJson(msg));
+        return (o.getClass().getSimpleName() + ":" + GsonUtil.formatJson(msg));
     }
 
 }

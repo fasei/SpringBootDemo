@@ -7,7 +7,7 @@ import com.google.gson.Gson;
  * Time: 2018-10-11
  * Description: This is
  */
-public class Base {
+public class Base<T> {
 
     @Override
     public String toString() {

@@ -23,12 +23,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 拦截所有请求，通过判断是否有 @LoginRequired 注解 决定是否需要登录
         //addPathPatterns 用户添加拦截规则
         //excludePathPatterns 用户排除拦截的
-        registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/**")
+        registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/controller/**").excludePathPatterns("/websocket/**")
 //                .excludePathPatterns("/swagger-resources/**","/error","/static/**")
         ;
-
-        registry.addInterceptor(localResourcesInterceptor()).addPathPatterns("/*.png");
-
     }
 
     @Override
