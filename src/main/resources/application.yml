@@ -30,6 +30,8 @@ spring:
 localfile:
     path: d:/aaa
 
+
+# 日志文件的位置
 logging:
   config: classpath:logback-spring.xml
   path:  D:/spring_log

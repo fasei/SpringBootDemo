@@ -36,15 +36,6 @@ public class UserController extends BaseController implements AbsUserController 
     @Autowired
     ConfigData mConfigData;
 
-//    @NacosValue(value = "${useLocalCache}", autoRefreshed = true)
-//    private String useLocalCache;
-
-//    @RequestMapping(value = "/get", method = GET)
-//    @ResponseBody
-//    public String get() {
-//        return useLocalCache;
-//    }
-
     @Resource
     UserServices mUserServices;
 

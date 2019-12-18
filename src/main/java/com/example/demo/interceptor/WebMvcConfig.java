@@ -26,6 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(authenticationInterceptor()).addPathPatterns("/controller/**").excludePathPatterns("/websocket/**")
 //                .excludePathPatterns("/swagger-resources/**","/error","/static/**")
         ;
+        registry.addInterceptor(new LogInterceptor());
     }
 
     @Override
