@@ -30,6 +30,7 @@
                 <include>templates/**</include>
                 <include>*.xml</include>
                 <include>*.properties</include>
+                <include>*.bat</include>
             </includes>
         </fileSet>
 

@@ -48,6 +48,25 @@ public class GlobalExceptionHandler {
         return myErrorHandler(myException);
     }
 
+//    /**
+//     * 拦截捕捉自定义异常 MyException.class
+//     *
+//     * @param ex
+//     * @return
+//     */
+//    @ExceptionHandler(value = MaxUploadSizeExceededException.class)
+//    @ResponseStatus(HttpStatus.OK)
+//    public Map myMaxUploadSizeHandler(MaxUploadSizeExceededException ex) {
+//        OutputUtil.d("controller主动抛出异常");
+//        MyException myException = new MyException();
+//        myException.setResultCode(ResultCode.MAX_UPLOADSIXE);
+//
+//        Map map = new HashMap();
+//        map.put("code", myException.getCode());
+//        map.put("msg", myException.getMsg());
+//        return map;
+//    }
+
     /**
      * 拦截捕捉自定义异常 MyException.class
      *

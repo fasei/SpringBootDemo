@@ -28,14 +28,14 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping(value = "/controller/img")
-@Api(value = "图片处理", description = "图片处理", tags = "img", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "图片处理",  tags = "img", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ImgController extends BaseController implements AbsImgController {
 
     @Autowired
     LocalFile mLocalFile;
 
     @Override
-    public Result uploadImg(@RequestParam MultipartFile multipartFile, @RequestParam(required = true) String dataType) {
+    public Result uploadImg(@RequestParam MultipartFile multipartFile) {
         if (multipartFile == null || multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename())) {
             return Result.failure(ResultCode.PARAM_IS_BLANK);
         }

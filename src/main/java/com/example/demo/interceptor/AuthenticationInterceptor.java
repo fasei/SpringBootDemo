@@ -51,7 +51,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         String ipAddress=IPUtil.getIpAddr(request);
         LogUtil.getPlatformLogger().info("IPAddress:",ipAddress);
 
-
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         // 判断接口是否需要登录

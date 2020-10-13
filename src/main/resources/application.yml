@@ -1,13 +1,10 @@
-server:
-  port: 20888
-
 hehe:
   name: 123456
   psw: 999999
 spring:
   datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/info?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+      url: jdbc:mysql://localhost:3306/info?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: xiaoyuanyuan1314
       max-active: 20
@@ -20,6 +17,8 @@ spring:
       enabled: true
       max-request-size: 50MB
       max-file-size: 50MB
+      resolve-lazily: true
+
   mvc:
     static-path-pattern: /**
   #可以添加访问本地资源设置访问
@@ -29,6 +28,16 @@ spring:
 # 上传的资源保存路径
 localfile:
     path: d:/aaa
+
+
+server:
+  port: 20888
+
+  tomcat:
+    # 文件上传超50M无法捕获异常，修改修改tomcat容器的大小，不然会先一步捕获异常
+    # 但是此处属性不生效，需要在DemoApplication 中添加bean对象才生效
+    max-swallow-size: -1
+
 
 
 # 日志文件的位置

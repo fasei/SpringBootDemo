@@ -11,10 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface AbsImgController {
     @ApiOperation(value = "上传图片", notes = "上传图片功能")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "dataType", value = "数据类型", required = true, dataType = "String", paramType = "query"),
-    })
     @RequestMapping(value = "/uploadimg", method = RequestMethod.POST)
-    Result uploadImg( MultipartFile multipartFile, String dataType);
+    Result uploadImg(MultipartFile multipartFile);
 
 }

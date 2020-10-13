@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.util.OutputUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -36,6 +37,8 @@ public class Swagger2 {
     }
 
     private ApiInfo apiInfo() {
+        OutputUtil.d("swagger2 url : http://localhost:20888/swagger-ui.html?baseUrl");
+
         return new ApiInfoBuilder()
                 .title("springboot利用swagger构建api文档")
                 .description("简单优雅的restful风格，")

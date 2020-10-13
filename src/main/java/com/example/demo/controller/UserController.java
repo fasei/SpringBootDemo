@@ -31,7 +31,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  */
 @RestController
 @RequestMapping(value = "/controller/demo")
-@Api(value = "用户信息查询", description = "用户基本信息操作API", tags = "UserApi", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "用户信息查询", tags = "UserApi", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController extends BaseController implements AbsUserController {
     @Autowired
     ConfigData mConfigData;
@@ -82,9 +82,9 @@ public class UserController extends BaseController implements AbsUserController 
     }
 
     @LoginRequired
-    @ApiOperation(value = "初次请求", notes = "带token请求数据", position = 2)
+    @ApiOperation(value = "初次请求", notes = "带token请求数据")
     @RequestMapping(value = "/hello", method = RequestMethod.POST)
-    public ConfigData getUserName() {
+    public Result getUserName() {
         String msg = "Spring Boot系列之Log4j2的配置及使用";
         logger.debug("debug:\n----------------\nddd" + System.getProperty("catalina.home") + "\n----------------");
         logger.info("ddd" + System.getProperty("catalina.home"));
@@ -101,7 +101,7 @@ public class UserController extends BaseController implements AbsUserController 
         LogUtil.getDBLogger().info("LogUtils.getDBLogger()");
         LogUtil.getExceptionLogger().info("LogUtils.getExceptionLogger()");
         LogUtil.getPlatformLogger().info("LogUtils.getPlatformLogger()");
-        return mConfigData;
+        return  Result.success(mConfigData);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class UserController extends BaseController implements AbsUserController 
     }
 
 
-    @ApiOperation(value = "添加自定义异常", notes = "自定义异常", position = 4, nickname = "22")
+    @ApiOperation(value = "添加自定义异常", notes = "自定义异常", nickname = "22")
     @RequestMapping(value = "/makeexception", method = GET)
     public int makeException() {
         logger.info("makeException");
