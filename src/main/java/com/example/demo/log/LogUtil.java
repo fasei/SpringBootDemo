@@ -41,4 +41,13 @@ public class LogUtil {
         return LoggerFactory.getLogger(LogEnum.EXCEPTION.getCategory());
     }
 
+    /**
+     * 普通日志logger
+     * @return
+     */
+    public static Logger getDefaultLogger() {
+        return LoggerFactory.getLogger("logger");
+    }
+
+
 }

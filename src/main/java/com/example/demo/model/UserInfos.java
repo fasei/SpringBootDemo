@@ -60,17 +60,4 @@ public class UserInfos {
     public void setRegistertime(String registertime) {
         this.registertime = registertime;
     }
-
-
-    @Override
-    public String toString() {
-        return "UserInfos{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", phone='" + phone + '\'' +
-                ", headerimg='" + headerimg + '\'' +
-                ", registertime='" + registertime + '\'' +
-                '}';
-    }
 }

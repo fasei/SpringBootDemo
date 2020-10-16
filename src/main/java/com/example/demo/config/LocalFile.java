@@ -3,21 +3,48 @@ package com.example.demo.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /**
  * Author: wangchao
  * Time: 2018-10-23
  * Description: This is
  */
 @Component
-@ConfigurationProperties(prefix = "localfile")
+@ConfigurationProperties(prefix = "uploadfile")
 public class LocalFile {
-    private String path;
 
-    public String getPath() {
-        return path;
+    // 获取存放位置
+    private String windows;
+    private String linux;
+
+    public String getWindows() {
+        return windows;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setWindows(String windows) {
+        this.windows = windows;
+    }
+
+    public String getLinux() {
+        return linux;
+    }
+
+    public void setLinux(String linux) {
+        this.linux = linux;
+    }
+
+    public String getBasePath() {
+        String locationPath = "";
+
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {
+            locationPath = windows;
+        } else {
+            locationPath = linux;
+        }
+
+        return locationPath;
+
     }
 }

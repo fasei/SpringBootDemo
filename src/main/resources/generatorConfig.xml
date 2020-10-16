@@ -111,6 +111,8 @@
 
         <table tableName="user_infos"/>
         <table tableName="user_login"/>
+        <table tableName="file_info"/>
+
 
     </context>
 </generatorConfiguration>
