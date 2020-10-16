@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.bean.Base;
 import com.example.demo.bean.response.Result;
-import com.example.demo.config.ConfigData;
 import com.example.demo.config.LocalFile;
-import com.example.demo.constants.ResultCode;
 import com.example.demo.controller.abs.AbsImgController;
 import com.example.demo.exception.MyException;
 import com.example.demo.mapper.FileInfoMapper;
@@ -12,31 +9,22 @@ import com.example.demo.model.FileInfo;
 import com.example.demo.model.FileInfoExample;
 import com.example.demo.service.FileInfoService;
 import com.example.demo.util.FileUtil;
-import com.example.demo.util.OutputUtil;
 import io.swagger.annotations.Api;
-import org.junit.platform.commons.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
-import sun.security.pkcs11.wrapper.Constants;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Author: wangchao

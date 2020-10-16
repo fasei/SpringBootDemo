@@ -1,0 +1,44 @@
+server:
+  port: 20888
+
+hehe:
+  name: 123456
+  psw: 999999
+spring:
+  datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/info?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+      username: root
+      password: xiaoyuanyuan1314
+      max-active: 20
+      max-idle: 8
+      min-idle: 8
+      initial-size: 10
+# 文件上传时的大小
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 50MB
+      max-file-size: 50MB
+  mvc:
+    static-path-pattern: /**
+  #可以添加访问本地资源设置访问
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${localfile.path}
+
+# 上传的资源保存路径
+localfile:
+    path: d:/aaa
+
+
+# 日志文件的位置
+logging:
+  config: classpath:logback-spring.xml
+  path:  D:/spring_log
+
+#配置分页插件pagehelper
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql

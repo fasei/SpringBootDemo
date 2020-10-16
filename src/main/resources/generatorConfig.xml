@@ -113,6 +113,9 @@
         <table tableName="user_login"/>
         <table tableName="file_info"/>
 
+        <table tableName="books_read"/>
+
+
 
     </context>
 </generatorConfiguration>
