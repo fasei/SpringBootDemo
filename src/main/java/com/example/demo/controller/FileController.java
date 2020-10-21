@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.bean.response.Result;
 import com.example.demo.config.LocalFile;
+import com.example.demo.constants.Constants;
 import com.example.demo.controller.abs.AbsImgController;
 import com.example.demo.exception.MyException;
 import com.example.demo.mapper.BooksReadMapper;
@@ -33,8 +34,8 @@ import java.util.*;
  * Description: This is
  */
 @RestController
-@RequestMapping(value = "/controller/img")
-@Api(value = "文件处理", tags = "img", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = Constants.FileControllerPath)
+@Api(tags = "文件管理中心", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class FileController extends BaseController implements AbsImgController {
     @Autowired
     LocalFile mLocalFile;

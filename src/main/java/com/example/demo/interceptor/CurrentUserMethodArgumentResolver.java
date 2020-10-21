@@ -1,7 +1,7 @@
 package com.example.demo.interceptor;
 
 import com.example.demo.annotation.CurrentUser;
-import com.example.demo.constants.CurrentUserConstants;
+import com.example.demo.constants.Constants;
 import com.example.demo.model.UserInfos;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -26,11 +26,11 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        UserInfos user = (UserInfos) webRequest.getAttribute(CurrentUserConstants.CURRENT_USER, RequestAttributes.SCOPE_REQUEST);
+        UserInfos user = (UserInfos) webRequest.getAttribute(Constants.CURRENT_USER, RequestAttributes.SCOPE_REQUEST);
         if (user != null) {
             return user;
         }
-        throw new MissingServletRequestPartException(CurrentUserConstants.CURRENT_USER);
+        throw new MissingServletRequestPartException(Constants.CURRENT_USER);
     }
 
 }

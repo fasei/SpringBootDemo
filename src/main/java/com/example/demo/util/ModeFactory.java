@@ -13,7 +13,7 @@ public class ModeFactory {
     public static UserInfos createNewUserInfo(String userName) {
         UserInfos u = new UserInfos();
         u.setName(userName);
-        u.setHeaderimg("");
+        u.setHeaderimg("http://www.badfwf.png");
         u.setNickname("王超");
 
         u.setPhone("15128296802");

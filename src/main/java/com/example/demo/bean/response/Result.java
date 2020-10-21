@@ -88,7 +88,7 @@ public class Result<T> extends Base<T> implements Serializable {
         this.msg = msg;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 

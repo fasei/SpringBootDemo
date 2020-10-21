@@ -5,6 +5,7 @@ import com.example.demo.annotation.LoginRequired;
 import com.example.demo.bean.response.Result;
 import com.example.demo.bean.response.TokenResponse;
 import com.example.demo.config.ConfigData;
+import com.example.demo.constants.Constants;
 import com.example.demo.constants.ResultCode;
 import com.example.demo.controller.abs.AbsUserController;
 import com.example.demo.exception.MyException;
@@ -15,14 +16,11 @@ import com.example.demo.service.UserServices;
 import com.example.demo.util.ModeFactory;
 import com.example.demo.util.TokenUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * Author: wangchao
@@ -30,8 +28,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * Description: This is 用户操作接口
  */
 @RestController
-@RequestMapping(value = "/controller/demo")
-@Api(value = "用户信息查询", tags = "UserApi", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = Constants.UserControllerPath)
+@Api(tags = "用户信息管理中心", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController extends BaseController implements AbsUserController {
     @Autowired
     ConfigData mConfigData;
@@ -39,11 +37,12 @@ public class UserController extends BaseController implements AbsUserController 
     @Resource
     UserServices mUserServices;
 
-    public Result login(@RequestParam String username, @RequestParam String password){
-        Result s = Result.getInstance();
-        UserLogin mUserLogin = null;
+    @Override
+    public Result<TokenResponse> login(@RequestParam String username, @RequestParam String password) {
+        Result result = Result.getInstance();
+
         try {
-            mUserLogin = mUserServices.getUserLogin(username);
+            UserLogin mUserLogin = mUserServices.getUserLogin(username);
             if (mUserLogin == null) {
                 return Result.failure(ResultCode.USER_NOT_EXIST);
             }
@@ -54,15 +53,16 @@ public class UserController extends BaseController implements AbsUserController 
             return Result.success(new TokenResponse(token));
         } catch (Exception e) {
             e.printStackTrace();
-            s.setResultCode(ResultCode.DATA_IS_WRONG);
+            result.setResultCode(ResultCode.DATA_IS_WRONG);
         }
-        return s;
+        return result;
     }
 
+    @Override
     @LoginRequired
     public Result authorizationLogin(@CurrentUser UserInfos user) {
         logger.info(user.toString());
-        return Result.success();
+        return Result.success(user);
     }
 
     public Result authorizationLogin(@RequestParam String authorizationid) {
@@ -81,10 +81,9 @@ public class UserController extends BaseController implements AbsUserController 
         return Result.failure(ResultCode.DATA_IS_WRONG);
     }
 
-    @LoginRequired
-    @ApiOperation(value = "初次请求", notes = "带token请求数据")
-    @RequestMapping(value = "/hello", method = RequestMethod.POST)
-    public Result getUserName() {
+
+    @Override
+    public Result hello() {
         String msg = "Spring Boot系列之Log4j2的配置及使用";
         logger.debug("debug:\n----------------\nddd" + System.getProperty("catalina.home") + "\n----------------");
         logger.info("ddd" + System.getProperty("catalina.home"));
@@ -101,7 +100,12 @@ public class UserController extends BaseController implements AbsUserController 
         LogUtil.getDBLogger().info("LogUtils.getDBLogger()");
         LogUtil.getExceptionLogger().info("LogUtils.getExceptionLogger()");
         LogUtil.getPlatformLogger().info("LogUtils.getPlatformLogger()");
-        return  Result.success(mConfigData);
+        return Result.success(mConfigData);
+    }
+
+    @Override
+    public String defaulttoken() {
+        return login("1111", "1111").getData().getToken();
     }
 
     @Override
@@ -131,10 +135,8 @@ public class UserController extends BaseController implements AbsUserController 
         return Result.success();
     }
 
-
-    @ApiOperation(value = "添加自定义异常", notes = "自定义异常", nickname = "22")
-    @RequestMapping(value = "/makeexception", method = GET)
-    public int makeException() {
+    @Override
+    public void makeException() {
         logger.info("makeException");
         throw new MyException(222, "自定义的错误");
     }

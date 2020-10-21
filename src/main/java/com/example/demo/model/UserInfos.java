@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class UserInfos {
+    @JsonIgnore
     private Long id;
 
     private String name;

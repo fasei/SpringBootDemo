@@ -1,7 +1,7 @@
 package com.example.demo.interceptor;
 
 import com.example.demo.annotation.LoginRequired;
-import com.example.demo.constants.CurrentUserConstants;
+import com.example.demo.constants.Constants;
 import com.example.demo.exception.MyException;
 import com.example.demo.log.LogUtil;
 import com.example.demo.model.UserInfos;
@@ -83,7 +83,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 throw new MyException(666, "用户不存在，请重新登录");
             }
             // 当前登录用户@CurrentUser
-            request.setAttribute(CurrentUserConstants.CURRENT_USER, user);
+            request.setAttribute(Constants.CURRENT_USER, user);
             return true;
         }
         return true;

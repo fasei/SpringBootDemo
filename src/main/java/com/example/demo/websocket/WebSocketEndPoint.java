@@ -1,17 +1,15 @@
 package com.example.demo.websocket;
 
+import com.example.demo.constants.Constants;
 import com.example.demo.util.GsonUtil;
 import com.example.demo.util.OutputUtil;
 import com.example.demo.websocket.message.HandlerBox;
 import com.example.demo.websocket.message.Message;
 import com.example.demo.websocket.message.MessageCenter;
-import com.example.demo.websocket.message.type.BaseMessageType;
 import com.example.demo.websocket.model.ResultBody;
-import com.example.demo.websocket.model.base.LoginModel;
 import com.example.demo.websocket.user.GlobalUserManager;
 import com.example.demo.websocket.user.MessageManage;
 import com.example.demo.websocket.user.UserInfoBox;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -23,7 +21,7 @@ import java.lang.reflect.Method;
  * Time: 2019-06-24
  * Description: This is
  */
-@ServerEndpoint(value = "/websocket/connect/")
+@ServerEndpoint(value = Constants.WebSocketPath)
 @Component
 public class WebSocketEndPoint {
     MessageManage mMessageManager = new MessageManage();
