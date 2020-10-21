@@ -20,4 +20,13 @@ public class BooksRead {
     public void setType(Integer type) {
         this.type = type;
     }
+
+
+    @Override
+    public String toString() {
+        return "BooksRead{" +
+                "id=" + id +
+                ", type=" + type +
+                '}';
+    }
 }

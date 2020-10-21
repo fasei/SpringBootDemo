@@ -17,6 +17,7 @@ public class LocalFile {
     // 获取存放位置
     private String windows;
     private String linux;
+    private String mac;
 
     public String getWindows() {
         return windows;
@@ -38,8 +39,10 @@ public class LocalFile {
         String locationPath = "";
 
         String os = System.getProperty("os.name");
-        if (os.toLowerCase().startsWith("win")) {
+        if (os.toLowerCase().contains("win")) {
             locationPath = windows;
+        } else if (os.toLowerCase().contains("mac")) {
+            locationPath = mac;
         } else {
             locationPath = linux;
         }

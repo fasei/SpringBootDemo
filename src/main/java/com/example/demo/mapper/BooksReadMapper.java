@@ -5,6 +5,7 @@ import com.example.demo.model.BooksReadExample;
 import com.example.demo.model.BooksReadWithBLOBs;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public interface BooksReadMapper {
     int countByExample(BooksReadExample example);
@@ -34,4 +35,7 @@ public interface BooksReadMapper {
     int updateByPrimaryKeyWithBLOBs(BooksReadWithBLOBs record);
 
     int updateByPrimaryKey(BooksRead record);
+
+    @Select("SELECT * FROM `books_read` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `books_read`)-(SELECT MIN(id) FROM `books_read`))+(SELECT MIN(id) FROM `books_read`)) AS id) AS t2 WHERE t1.id >= t2.id ORDER BY t1.id LIMIT  #{randomCount};")
+    List<BooksRead> getrRandomBook(@Param("randomCount") int randomCount);
 }

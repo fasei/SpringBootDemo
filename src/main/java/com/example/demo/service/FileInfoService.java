@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,7 +43,7 @@ public class FileInfoService {
      */
     @Transactional
     public Result<?> upload(MultipartFile multipartFile) throws MyException {
-        if (multipartFile == null /*|| multipartFile.isEmpty() */|| StringUtils.isBlank(multipartFile.getOriginalFilename())) {
+        if (multipartFile == null /*|| multipartFile.isEmpty() */ || StringUtils.isBlank(multipartFile.getOriginalFilename())) {
             return Result.failure(ResultCode.PARAM_IS_BLANK);
         }
         String contentType = multipartFile.getContentType();
@@ -170,6 +171,7 @@ public class FileInfoService {
 
         }
     }
+
 
 
 }

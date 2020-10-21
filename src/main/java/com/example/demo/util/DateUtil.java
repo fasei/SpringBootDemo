@@ -141,5 +141,10 @@ public class DateUtil {
         return dateNum;
     }
 
+    public static Long getNowTime() {
+        return System.currentTimeMillis();
+
+    }
+
 
 }

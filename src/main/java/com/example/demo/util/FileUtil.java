@@ -2,6 +2,7 @@ package com.example.demo.util;
 
 import com.example.demo.bean.response.Result;
 import com.example.demo.constants.ResultCode;
+import com.example.demo.log.LogUtil;
 import org.junit.platform.commons.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -108,38 +109,42 @@ public class FileUtil {
 
     /**
      * 获取文件系统分隔符
+     *
      * @return
      */
-    public static String getFileSeparator(){
-        return  System.getProperty("file.separator");
+    public static String getFileSeparator() {
+        return System.getProperty("file.separator");
     }
 
     /**
      * 获取文件保存的文件夹
      * 1.
+     *
      * @return
      */
-    public static String getFolder(){
+    public static String getFolder() {
         String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String timeStr = new SimpleDateFormat("HHmmss").format(new Date());
-        return   getFileSeparator() + dateStr + getFileSeparator() + timeStr+getFileSeparator();
+        return getFileSeparator() + dateStr + getFileSeparator() + timeStr + getFileSeparator();
     }
 
     /**
      * 获取随机文件名
+     *
      * @return
      */
-    public static String getFileName(){
-        return UUIDUtil.getUid("Wanc_" , 17) ;
+    public static String getFileName() {
+        return UUIDUtil.getUid("Wanc_", 17);
     }
 
     /**
      * 返回文件名后缀
+     *
      * @param fileName
      * @return
      */
-    public static String getFileNameSub(String fileName){
-        return  fileName.substring(fileName.lastIndexOf("."),fileName.length());
+    public static String getFileNameSub(String fileName) {
+        return fileName.substring(fileName.lastIndexOf("."), fileName.length());
     }
 
     /**
@@ -153,10 +158,10 @@ public class FileUtil {
     //TODO 这样上传,如果文件过大,会导致内存溢出
     public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
         File targetFile = new File(filePath);
-        if(!targetFile.exists()){
+        if (!targetFile.exists()) {
             targetFile.mkdirs();
         }
-        FileOutputStream out = new FileOutputStream(filePath+fileName);
+        FileOutputStream out = new FileOutputStream(filePath + fileName);
         out.write(file);
         out.flush();
         out.close();
@@ -164,6 +169,7 @@ public class FileUtil {
 
     /**
      * 匹配文件的后缀
+     *
      * @param fileName
      * @param exts
      * @return
@@ -183,6 +189,7 @@ public class FileUtil {
 
     /**
      * 文件路径取md5
+     *
      * @param path
      * @return
      */
@@ -190,13 +197,8 @@ public class FileUtil {
         String value = null;
         FileInputStream fis = null;
         try {
-            fis = new FileInputStream(path);
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] buffer = new byte[4096];
-            int length;
-            while ((length = fis.read(buffer, 0, 4096)) != -1) {
-                md.update(buffer, 0, length);
-            }
+            md.update(path.getBytes());
 
             StringBuilder sb = new StringBuilder(md.digest().length);
             for (byte x : md.digest()) {
@@ -206,8 +208,10 @@ public class FileUtil {
                     sb.append(Integer.toHexString(x & 0xff));
                 }
             }
+
+            LogUtil.getDBLogger().debug("md5:" + sb.toString());
             return sb.toString();
-        } catch (NoSuchAlgorithmException | IOException e) {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
 //            log.error("calc md5 failed", e);
         } finally {

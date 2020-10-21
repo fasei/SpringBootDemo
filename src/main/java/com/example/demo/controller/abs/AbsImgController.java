@@ -16,7 +16,6 @@ public interface AbsImgController {
     @RequestMapping(value = "/uploadimg", method = RequestMethod.POST)
     Result uploadImg(MultipartFile multipartFile);
 
-
     @ApiOperation(value = "下载文件", notes = "下载文件功能")
     @RequestMapping(value = "/download/{fileName}", method = RequestMethod.GET)
     void downloadFile(@PathVariable("fileName") String fileName, HttpServletResponse response);
@@ -25,9 +24,16 @@ public interface AbsImgController {
     @RequestMapping(value = "/view", method = RequestMethod.GET)
     ResponseEntity<InputStreamResource> view(@RequestParam String fileName);
 
-
     @ApiOperation(value = "查看文字", notes = "查看文字功能")
     @RequestMapping(value = "/book", method = RequestMethod.GET)
     ResponseEntity<InputStreamResource> book(@RequestParam String id);
+
+    @ApiOperation(value = "查看随机文字", notes = "查看随机文字功能")
+    @RequestMapping(value = "/randombook", method = RequestMethod.GET)
+    ResponseEntity<InputStreamResource> randombook();
+
+    @ApiOperation(value = "随机获取数据", notes = "随机获取数据功能")
+    @RequestMapping(value = "/randombooks", method = RequestMethod.GET)
+    Result randomBooks();
 
 }

@@ -17,7 +17,18 @@ public class Welcome implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        OutputUtil.log("服务启动完成！");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                OutputUtil.log("服务启动完成！");
+                OutputUtil.d("swagger2 url : http://localhost:20888/swagger-ui.html?baseUrl");
+            }
+        }).start();
 
     }
 }

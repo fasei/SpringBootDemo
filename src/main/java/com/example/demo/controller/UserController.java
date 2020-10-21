@@ -138,19 +138,6 @@ public class UserController extends BaseController implements AbsUserController 
         logger.info("makeException");
         throw new MyException(222, "自定义的错误");
     }
-/*
-    @ApiOperation(value = "添加随机异常", notes = "自定义异常", position = 5)
-    @RequestMapping(value = "/makeerror", method = RequestMethod.GET)
-    public int makeRandomError() {
-        throw new NullPointerException("随机异常");
-    }
 
-    @ApiOperation(value = "查询用户", notes = "分页查询用户", position = 6)
-    @RequestMapping(value = "/getusers/{pagenum}/{pagesize}", method = RequestMethod.GET)
-    public List<Userinfo> getUsers(@PathVariable("pagenum") int pagenum, @PathVariable("pagesize") int pagesize) {
-        return mapper.getUserList(pagenum, pagesize);
-    }
-
-    */
 
 }

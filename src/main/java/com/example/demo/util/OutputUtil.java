@@ -3,6 +3,8 @@ package com.example.demo.util;
 import com.example.demo.bean.Base;
 import com.google.gson.Gson;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Author: wangchao
  * Time: 2018-10-11
@@ -22,7 +24,11 @@ public class OutputUtil {
         }
         Gson g = new Gson();
         String msg = g.toJson(o);
-        System.out.println(o.getClass().getSimpleName() + ":" + GsonUtil.formatJson(msg));
+        try {
+            System.out.println(new String((o.getClass().getSimpleName() + ":" + GsonUtil.formatJson(msg)).getBytes(),"utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void d(Object o) {
@@ -31,8 +37,11 @@ public class OutputUtil {
         }
         Gson g = new Gson();
         String msg = g.toJson(o);
-        System.out.println(GsonUtil.formatJson(msg));
-
+        try {
+            System.out.println(new String((GsonUtil.formatJson(msg)).getBytes(),"utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -5,7 +5,7 @@
 
     <groupId>com.example.demo</groupId>
     <artifactId>demo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.98.3</version>
     <packaging>jar</packaging>
 
     <name>demo</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.4.RELEASE</version>
+        <version>2.3.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -101,7 +101,7 @@
             <artifactId>junit-jupiter-api</artifactId>
         </dependency>
 
-    <!--WebSocket引用库-->
+        <!--WebSocket引用库-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
@@ -114,14 +114,26 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!--热启动库-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <!-- optional=true, 依赖不会传递, 该项目依赖devtools; 之后依赖boot项目的项目如果想要使用devtools, 需要重新引入 -->
+            <optional>true</optional>
+        </dependency>
+
+        <!-- SQLite 驱动 -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.21.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+
+            <!--mybatis插件  -->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
@@ -139,52 +151,58 @@
                     <overwrite>true</overwrite>
                 </configuration>
             </plugin>
+            <!--自动打包插件  -->
+            <!--
+            使用此插件会打包成1个jar包，不可以修改配置文件
+      <plugin>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-maven-plugin</artifactId>
+           <executions>
+               <execution>
+                   <goals>
+                       <goal>repackage</goal>
+                   </goals>
+               </execution>
+           </executions>
+       </plugin>-->
 
+            <!--打包时去除第三方依赖-->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.example.demo.DemoApplication</mainClass>
-                        </manifest>
-                    </archive>
-                    <!-- 排除配置文件 -->
-                    <excludes >
-                        <exclude>*.yml</exclude>
-                    </excludes>
+                    <layout>ZIP</layout>
+                    <includes>
+                        <include>
+                            <groupId>non-exists</groupId>
+                            <artifactId>non-exists</artifactId>
+                        </include>
+                    </includes>
                 </configuration>
             </plugin>
-
+            <!--拷贝第三方依赖文件到指定目录-->
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <finalName>dabao</finalName>
-                    <descriptors>
-                        <!--描述文件路径-->
-                        <descriptor>assembly.xml</descriptor>
-                    </descriptors>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.example.demo.DemoApplication</mainClass> <!-- 你的主类名 -->
-                        </manifest>
-                    </archive>
-                    <outputDirectory>output</outputDirectory>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
+                        <id>copy-dependencies</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
+                        <configuration>
+                            <!--target/lib是依赖jar包的输出目录，根据自己喜好配置-->
+                            <outputDirectory>target/lib</outputDirectory>
+                            <excludeTransitive>false</excludeTransitive>
+                            <stripVersion>false</stripVersion>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+
         </plugins>
     </build>
 
