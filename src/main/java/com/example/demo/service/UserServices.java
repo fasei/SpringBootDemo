@@ -10,6 +10,8 @@ import com.example.demo.service.abs.AbsUserInfosServices;
 import com.example.demo.service.abs.AbsUserLoginServices;
 import com.example.demo.util.OutputUtil;
 import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import java.util.List;
 
 @Service("UserServices")
 public class UserServices implements AbsUserInfosServices, AbsUserLoginServices {
+    Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
+
     @Autowired
     UserLoginMapper mUserLoginMapper;
 
@@ -32,9 +36,9 @@ public class UserServices implements AbsUserInfosServices, AbsUserLoginServices 
     @Transactional
     public int addNewUser(UserInfos mUserInfos, UserLogin mUserLogin) throws Exception {
         int result = -1;
-        OutputUtil.log("注册新用户：");
-        OutputUtil.log(mUserInfos);
-        OutputUtil.log(mUserLogin);
+        logger.info("注册新用户：");
+        logger.info(mUserInfos.toString());
+        logger.info(mUserLogin.toString());
         UserLoginExample e = new UserLoginExample();
         e.createCriteria().andNameEqualTo(mUserLogin.getName() + "");
         List<UserLogin> mDataLists = mUserLoginMapper.selectByExample(e);
@@ -42,10 +46,10 @@ public class UserServices implements AbsUserInfosServices, AbsUserLoginServices 
             mUserLoginMapper.insert(mUserLogin);
             mUserInfosMapper.insert(mUserInfos);
             result = 1;
-            OutputUtil.log("注册成功！");
+            logger.info("注册成功！");
         } else {//用户已存在
             result = 2;
-            OutputUtil.log("该用户已注册！");
+            logger.info("该用户已注册！");
         }
         return result;
     }

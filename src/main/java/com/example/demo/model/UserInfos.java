@@ -1,8 +1,9 @@
 package com.example.demo.model;
 
+import com.example.demo.bean.Base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class UserInfos {
+public class UserInfos extends Base {
     @JsonIgnore
     private Long id;
 

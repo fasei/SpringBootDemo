@@ -134,7 +134,7 @@ public class FileUtil {
      * @return
      */
     public static String getFileName() {
-        return UUIDUtil.getUid("Wanc_", 17);
+        return UUIDUtil.getUid("wanc_", 17);
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
-public class UserLogin {
+import com.example.demo.bean.Base;
+
+public class UserLogin extends Base {
     private Long id;
 
     private String name;

@@ -3,12 +3,12 @@ package com.example.demo.interceptor;
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.constants.Constants;
 import com.example.demo.exception.MyException;
-import com.example.demo.log.LogUtil;
 import com.example.demo.model.UserInfos;
 import com.example.demo.service.UserServices;
-import com.example.demo.util.IPUtil;
 import com.example.demo.util.TokenUtil;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -18,6 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Date;
+
+import static com.example.demo.constants.ResultCode.*;
 
 /**
  * Author: wangchao
@@ -26,6 +29,8 @@ import java.lang.reflect.Method;
  */
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
+    Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
+
     public final static String Authorization = "Authorization";
     @Autowired
     private UserServices userService;
@@ -46,20 +51,17 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        String ipAddress=IPUtil.getIpAddr(request);
-        LogUtil.getPlatformLogger().info("IPAddress:",ipAddress);
-
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
-        // 判断接口是否需要登录
+        // 判断接口是否需要登录,注解需写在实现的方法上方
         LoginRequired methodAnnotation = method.getAnnotation(LoginRequired.class);
+
         // 有 @LoginRequired 注解，需要认证
         if (methodAnnotation != null) {
             // 判断是否存在令牌信息，如果存在，则允许登录
-//            String accessToken = request.getParameter(ACCESS_TOKEN);
             String accessToken = request.getHeader(Authorization);
             if (null == accessToken) {
-                throw new MyException(555, "无token，请重新登录");
+                throw new MyException(USER_NOT_LOGGED_IN.code(), USER_NOT_LOGGED_IN.message());
             }
             Claims claims = null;
             try {
@@ -68,19 +70,22 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 e.printStackTrace();
             }
             if (claims == null) {
-                throw new MyException(33, "无效token");
+                throw new MyException(USER_TOKEN_ERROR.code(), USER_TOKEN_ERROR.message());
             }
-            String userStrID = claims.getId();
-            Long id = Long.parseLong(userStrID);
+            if (claims.getExpiration().before(new Date())) {  //验证是否到期
+                throw new MyException(USER_TOKEN_EXPIRATION.code(), USER_TOKEN_EXPIRATION.message());
+            }
 
             UserInfos user = null;
             try {
+                String userStrID = claims.getId();
+                Long id = Long.parseLong(userStrID);
                 user = userService.getUserInfo(id);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (user == null) {
-                throw new MyException(666, "用户不存在，请重新登录");
+                throw new MyException(USER_NOT_EXIST.code(), USER_NOT_EXIST.message());
             }
             // 当前登录用户@CurrentUser
             request.setAttribute(Constants.CURRENT_USER, user);
@@ -100,7 +105,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        LogUtil.getPlatformLogger().info("AuthenticationInterceptor.postHandle");
 
     }
 
@@ -115,6 +119,5 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        LogUtil.getPlatformLogger().info("AuthenticationInterceptor.afterCompletion");
     }
 }

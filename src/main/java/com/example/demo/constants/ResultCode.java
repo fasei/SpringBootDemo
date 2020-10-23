@@ -26,6 +26,8 @@ public enum ResultCode {
     USER_NOT_EXIST(20004, "用户不存在"),
     USER_HAS_EXISTED(20005, "用户已存在"),
     USER_LOGIN_ERROR_PASSWORD(20006, "密码错误"),
+    USER_TOKEN_ERROR(20007, "无效的登录信息"),
+    USER_TOKEN_EXPIRATION(20008, "Token已过期"),
 
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),
@@ -41,7 +43,6 @@ public enum ResultCode {
 
     /*上传文件错误：51001-51999*/
     MAX_UPLOADSIXE(51001, "上传文件过大"),
-
 
 
     /* 接口错误：60001-69999 */

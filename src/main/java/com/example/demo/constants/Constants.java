@@ -6,6 +6,12 @@ package com.example.demo.constants;
  * Description: This is
  */
 public class Constants {
+    public static class Result{
+        public static  final String Code="code";
+        public static  final String Msg="msg";
+        public static  final String Data="data";
+    }
+
     /**
      * 当前用户参数名
      */

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.bean.Base;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 @Component
 @ConfigurationProperties(prefix = "uploadfile")
-public class LocalFile {
+public class LocalFile extends Base {
 
     // 获取存放位置
     private String windows;

@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.bean.response.Result;
 import com.example.demo.config.LocalFile;
 import com.example.demo.constants.Constants;
-import com.example.demo.controller.abs.AbsImgController;
 import com.example.demo.exception.MyException;
 import com.example.demo.mapper.BooksReadMapper;
 import com.example.demo.mapper.FileInfoMapper;
@@ -12,21 +11,20 @@ import com.example.demo.service.FileInfoService;
 import com.example.demo.util.DateUtil;
 import com.example.demo.util.FileUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Author: wangchao
@@ -36,7 +34,7 @@ import java.util.*;
 @RestController
 @RequestMapping(value = Constants.FileControllerPath)
 @Api(tags = "文件管理中心", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class FileController extends BaseController implements AbsImgController {
+public class FileController extends BaseController {
     @Autowired
     LocalFile mLocalFile;
 
@@ -46,11 +44,11 @@ public class FileController extends BaseController implements AbsImgController {
     @Autowired
     private BooksReadMapper booksReadMapper;
 
-
     @Autowired
     FileInfoMapper mFileInfoMapper;
 
-    @Override
+    @ApiOperation(value = "上传图片", notes = "上传图片功能")
+    @RequestMapping(value = "/uploadimg", method = RequestMethod.POST)
     public Result uploadImg(@RequestParam MultipartFile multipartFile) {
         Result result = null;
         try {
@@ -61,7 +59,8 @@ public class FileController extends BaseController implements AbsImgController {
         return result;
     }
 
-    @Override
+    @ApiOperation(value = "下载文件", notes = "下载文件功能")
+    @RequestMapping(value = "/download/{fileName}", method = RequestMethod.GET)
     public void downloadFile(@PathVariable String fileName, HttpServletResponse response) {
         try {
             logger.info("fileName:" + fileName);
@@ -71,7 +70,8 @@ public class FileController extends BaseController implements AbsImgController {
         }
     }
 
-    @Override
+    @ApiOperation(value = "查看文件", notes = "查看文件功能")
+    @RequestMapping(value = "/view", method = RequestMethod.GET)
     public ResponseEntity<InputStreamResource> view(String fileName) {
         HttpHeaders header = new HttpHeaders();
         header.set("status", "error");
@@ -100,12 +100,10 @@ public class FileController extends BaseController implements AbsImgController {
             header.setContentType(MediaType.TEXT_PLAIN);
         } else if (FileUtil.match(fileInfo.getFileName(), "json")) {
             header.setContentType(MediaType.APPLICATION_JSON);
-        } else if (FileUtil.match(fileInfo.getFileName(), "doc")) {
-            header.setContentType(MediaType.valueOf("application/msword  "));
         } else if (FileUtil.match(fileInfo.getFileName(), "xml")) {
             header.setContentType(MediaType.APPLICATION_XML);
         } else {
-            header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         header.add("X-Filename", fileInfo.getFileName());
         header.add("X-MD5", fileInfo.getMd5());
@@ -122,7 +120,8 @@ public class FileController extends BaseController implements AbsImgController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @Override
+    @ApiOperation(value = "查看文字", notes = "查看文字功能")
+    @RequestMapping(value = "/book", method = RequestMethod.GET)
     public ResponseEntity<InputStreamResource> book(String id) {
         List<BooksReadWithBLOBs> booksReads = null;
         try {
@@ -148,7 +147,8 @@ public class FileController extends BaseController implements AbsImgController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @Override
+    @ApiOperation(value = "查看随机文字", notes = "查看随机文字功能")
+    @RequestMapping(value = "/randombook", method = RequestMethod.GET)
     public ResponseEntity<InputStreamResource> randombook() {
         ResponseEntity<InputStreamResource> result;
         while (true) {
@@ -162,7 +162,8 @@ public class FileController extends BaseController implements AbsImgController {
         return result;
     }
 
-    @Override
+    @ApiOperation(value = "随机获取数据", notes = "随机获取数据功能")
+    @RequestMapping(value = "/randombooks", method = RequestMethod.GET)
     public Result randomBooks() {
         HashMap<Integer, BooksRead> hashMap = new HashMap<>();
 

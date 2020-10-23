@@ -1,6 +1,7 @@
 hehe:
   name: 123456
   psw: 999999
+
 spring:
   main:
     allow-bean-definition-overriding: true

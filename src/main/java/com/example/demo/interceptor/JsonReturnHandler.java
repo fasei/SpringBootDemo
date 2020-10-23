@@ -2,6 +2,8 @@ package com.example.demo.interceptor;
 
 import com.example.demo.annotation.JsonFieldFilter;
 import com.example.demo.bean.JsonFilterSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
  * Description: This is
  */
 public class JsonReturnHandler implements HandlerMethodReturnValueHandler {
+    Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
+
     @Override
     public boolean supportsReturnType(MethodParameter methodParameter) {
         return methodParameter.hasMethodAnnotation(JsonFieldFilter.class);
@@ -33,6 +37,5 @@ public class JsonReturnHandler implements HandlerMethodReturnValueHandler {
         HttpServletResponse response = request.getNativeResponse(HttpServletResponse.class);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.getWriter().write(serializer.toJson(returnObject));
-
     }
 }

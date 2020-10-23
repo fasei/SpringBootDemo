@@ -19,7 +19,7 @@ import java.util.Date;
  * Description: This is jwt创建token
  */
 public class TokenUtil {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static Logger logger = LoggerFactory.getLogger("TokenUtil");
     /**
      * 签名秘钥
      */
@@ -33,9 +33,11 @@ public class TokenUtil {
      */
     public static String createJwtToken(String id) {
         String issuer = "www.guangyuanbj.com";
-        String subject = "luomouren@xxx.com";
-        long ttlMillis = System.currentTimeMillis();
-        return createJwtToken(id, issuer, subject, ttlMillis);
+        String randomSubject = UUIDUtil.getShortUid();//加入随机数，避免token过于有规律
+        long ttlMillis = 30 * 365 * 24 * 60 * 60 * 1000L;//30年有效期
+        logger.info("randomSubject:" + randomSubject);
+        logger.info("ttlMillis:" + ttlMillis);
+        return createJwtToken(id, issuer, randomSubject, ttlMillis);
     }
 
     /**
@@ -45,7 +47,7 @@ public class TokenUtil {
      * @param issuer    该JWT的签发者，是否使用是可选的
      * @param subject   该JWT所面向的用户，是否使用是可选的 AES128加密
      * @param ttlMillis 过期的时间长度 （单位：毫秒ms）
-     * @return token String
+     * @return token String  Len()=197
      */
     public static String createJwtToken(String id, String issuer, String subject, long ttlMillis) {
         // 签名算法 ，将对token进行签名
@@ -78,6 +80,7 @@ public class TokenUtil {
         //就开始压缩为xxxxxxxxxxxxxx.xxxxxxxxxxxxxxx.xxxxxxxxxxxxx这样的jwt
         //打印了一哈哈确实是下面的这个样子
         //eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiJEU1NGQVdEV0FEQVMuLi4iLCJzdWIiOiIiLCJ1c2VyX25hbWUiOiJhZG1pbiIsIm5pY2tfbmFtZSI6IkRBU0RBMTIxIiwiZXhwIjoxNTE3ODI4MDE4LCJpYXQiOjE1MTc4Mjc5NTgsImp0aSI6Imp3dCJ9.xjIvBbdPbEMBMurmwW6IzBkS3MPwicbqQa2Y5hjHSyo
+        //eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIxIiwiaWF0IjoxNjAzMzI3NjM3LCJzdWIiOiJsdW9tb3VyZW5AeHh4LmNvbSIsImlzcyI6Ind3dy5ndWFuZ3l1YW5iai5jb20iLCJleHAiOjMyMDY2NTUyNzV9.wT_kYqYNmY9LMhSiwLBUYSFdCoPReK3PpV_WVYO_2m4
         return builder.compact();
     }
 

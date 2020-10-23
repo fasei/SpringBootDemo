@@ -1,13 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.annotation.CurrentUser;
 import com.example.demo.annotation.LoginRequired;
 import com.example.demo.bean.response.Result;
 import com.example.demo.bean.response.TokenResponse;
 import com.example.demo.config.ConfigData;
 import com.example.demo.constants.Constants;
 import com.example.demo.constants.ResultCode;
-import com.example.demo.controller.abs.AbsUserController;
 import com.example.demo.exception.MyException;
 import com.example.demo.log.LogUtil;
 import com.example.demo.model.UserInfos;
@@ -16,11 +14,21 @@ import com.example.demo.service.UserServices;
 import com.example.demo.util.ModeFactory;
 import com.example.demo.util.TokenUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.*;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * Author: wangchao
@@ -30,15 +38,21 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping(value = Constants.UserControllerPath)
 @Api(tags = "用户信息管理中心", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public class UserController extends BaseController implements AbsUserController {
+@Validated
+public class UserController extends BaseController {
     @Autowired
     ConfigData mConfigData;
 
     @Resource
     UserServices mUserServices;
 
-    @Override
-    public Result<TokenResponse> login(@RequestParam String username, @RequestParam String password) {
+    @ApiOperation(value = "普通登录", notes = "根据用户名和密码来登录获取token")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "登录密码", required = true, dataType = "String", paramType = "query"),
+    })
+    @RequestMapping(value = "/login", method = {RequestMethod.POST})
+    public Result<TokenResponse> login(@Size(min = 3, max = 20, message = "用户名最少为3位") String username, @Size(min = 6, max = 20, message = "密码最少为6位") String password) {
         Result result = Result.getInstance();
 
         try {
@@ -58,14 +72,15 @@ public class UserController extends BaseController implements AbsUserController 
         return result;
     }
 
-    @Override
     @LoginRequired
-    public Result authorizationLogin(@CurrentUser UserInfos user) {
+    @ApiOperation(value = "授权登录", notes = "使用授权ID来登录获取token")
+    @RequestMapping(value = "/authorizationlogin", method = RequestMethod.POST)
+    public Result authorizationLogin(UserInfos user) {
         logger.info(user.toString());
         return Result.success(user);
     }
 
-    public Result authorizationLogin(@RequestParam String authorizationid) {
+    public Result authorizationLogin(String authorizationid) {
         UserInfos user = null;
         try {
             user = mUserServices.getUserInfo(authorizationid);
@@ -81,34 +96,34 @@ public class UserController extends BaseController implements AbsUserController 
         return Result.failure(ResultCode.DATA_IS_WRONG);
     }
 
-
-    @Override
+    @LoginRequired
+    @ApiOperation(value = "初次请求", notes = "带token请求数据")
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public Result hello() {
         String msg = "Spring Boot系列之Log4j2的配置及使用";
-        logger.debug("debug:\n----------------\nddd" + System.getProperty("catalina.home") + "\n----------------");
-        logger.info("ddd" + System.getProperty("catalina.home"));
-        logger.info("info:\n----------------\nddd" + System.getProperty("catalina.home") + "\n----------------");
-        logger.info(msg);
-        logger.trace(msg);
-        logger.debug(msg);
+        logger.info("catalina.home:" + System.getProperty("catalina.home"));
         logger.info(msg);
         logger.info(mConfigData.toString());
-        logger.warn(msg);
-        logger.error(msg);
 
-        LogUtil.getBussinessLogger().info("LogUtils.getBussinessLogger().info");
+        LogUtil.getBussinessLogger().info("LogUtils.getBussinessLogger().info()");
         LogUtil.getDBLogger().info("LogUtils.getDBLogger()");
         LogUtil.getExceptionLogger().info("LogUtils.getExceptionLogger()");
         LogUtil.getPlatformLogger().info("LogUtils.getPlatformLogger()");
         return Result.success(mConfigData);
     }
 
-    @Override
+    @ApiOperation(value = "默认token", notes = "默认token")
+    @RequestMapping(value = "/defaulttoken", method = {GET})
     public String defaulttoken() {
         return login("1111", "1111").getData().getToken();
     }
 
-    @Override
+    @ApiOperation(value = "注册用户", notes = "注册新用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "password", value = "登录密码", required = true, dataType = "String", paramType = "query"),
+    })
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Result registerUser(@RequestParam String username, @RequestParam String password) {
         UserInfos user = null;
         try {
@@ -135,7 +150,8 @@ public class UserController extends BaseController implements AbsUserController 
         return Result.success();
     }
 
-    @Override
+    @ApiOperation(value = "添加自定义异常", notes = "自定义异常")
+    @RequestMapping(value = "/makeexception", method = {GET})
     public void makeException() {
         logger.info("makeException");
         throw new MyException(222, "自定义的错误");

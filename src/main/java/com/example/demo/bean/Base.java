@@ -12,6 +12,6 @@ public class Base<T> {
     @Override
     public String toString() {
         Gson g = new Gson();
-        return g.toJson(this);
+        return getClass().getSimpleName() + ":" + g.toJson(this);
     }
 }

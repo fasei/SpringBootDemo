@@ -1,12 +1,13 @@
 package com.example.demo.config;
 
+import com.example.demo.bean.Base;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "hehe")
-public class ConfigData {
+public class ConfigData extends Base {
     private String name;
     private String psw;
 
